@@ -1,13 +1,11 @@
-const axiosInstance = require('../../api/axiosInstance')
-
-const API_URL = '/job-application'
+const { getPoints } = require('../api')
 
 const fetchRoutesData = async() => {
   try {
-    const response = await axiosInstance.get(API_URL)
-    return response.data
+    const points = await getPoints()
+    return points
   } catch (error) {
-    console.error('Error fetching data from API:', error)
+    console.error('Error fetching data:', error)
     return []
   }
 }
