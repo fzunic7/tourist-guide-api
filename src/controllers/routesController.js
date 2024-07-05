@@ -12,32 +12,37 @@ const { fetchRoutesData } = require('../services/dataService')
  */
 const findNearestRoutes = async(req, res) => {
   const { lng, lat, count = 10 } = req.query
-  const coordinates = [parseFloat(lng), parseFloat(lat)]
-
   if (!lng || !lat) {
     return res.status(400)
       .json({ error: 'lng and lat are required' })
   }
 
-  const routes = await fetchRoutesData()
+  const coordinates = [parseFloat(lng), parseFloat(lat)]
 
-  const routesWithDistance = routes.flatMap(route => {
-    const distances = route.pointsOnRoutes.map(pointOnRoute => {
-      const region = pointOnRoute.point.region
-      const center = turf.center(region.geometry)
-      const distance = turf.distance(center.geometry.coordinates, coordinates)
-      return { ...pointOnRoute, distance }
+  try {
+    const routes = await fetchRoutesData()
+
+    const routesWithMinDistance = routes.map(route => {
+      const minDistance = Math.min(
+        ...route.pointsOnRoutes.map(pointOnRoute => {
+          const region = pointOnRoute.point.region
+          const center = turf.center(region.geometry)
+          return turf.distance(center.geometry.coordinates, coordinates)
+        })
+      )
+      return { ...route, distance: minDistance }
     })
 
-    const minDistance = Math.min(...distances.map(d => d.distance))
-    return distances.map(point => ({ ...route, ...point, distance: minDistance }))
-  })
+    routesWithMinDistance.sort((a, b) => a.distance - b.distance)
 
-  routesWithDistance.sort((a, b) => a.distance - b.distance)
+    const nearestRoutes = routesWithMinDistance.slice(0, count)
 
-  const nearestRoutes = routesWithDistance.slice(0, count)
-
-  res.json({ Routes: nearestRoutes })
+    res.json({ Routes: nearestRoutes })
+  } catch (error) {
+    console.error('Error fetching routes:', error)
+    res.status(500)
+      .json({ error: 'Failed to fetch routes' })
+  }
 }
 
 module.exports = { findNearestRoutes }
