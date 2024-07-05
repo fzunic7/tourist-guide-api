@@ -2,10 +2,9 @@ const { getPoints } = require('../api')
 
 const fetchRoutesData = async() => {
   try {
-    const points = await getPoints()
-    return points
+    return await getPoints()
   } catch (error) {
-    console.error('Error fetching data:', error)
+    console.error('Error fetching data from API:', error)
     return []
   }
 }

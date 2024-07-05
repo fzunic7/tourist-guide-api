@@ -1,7 +1,9 @@
-const { fetchRoutesData } = require('./routes')
+const { API_URL } = require('./routes')
+const axiosInstance = require('./axiosInstance')
 
 const getPoints = async() => {
-  return await fetchRoutesData()
+  const response = await axiosInstance.get(API_URL)
+  return response.data
 }
 
 module.exports = { getPoints }
