@@ -24,16 +24,14 @@ const findPointsInViewport = async(req, res) => {
 
   const routes = await fetchRoutesData()
 
-  const pointsInViewport = []
-
-  routes.forEach(route => {
-    route.pointsOnRoutes.forEach(pointOnRoute => {
-      const region = pointOnRoute.point.region
-      if (turf.booleanIntersects(viewport, region.geometry)) {
-        pointsInViewport.push(pointOnRoute.point)
-      }
-    })
-  })
+  const pointsInViewport = routes
+    .flatMap(route =>
+      route.pointsOnRoutes
+        .filter(pointOnRoute =>
+          turf.booleanIntersects(viewport, pointOnRoute.point.region.geometry)
+        )
+        .map(pointOnRoute => pointOnRoute.point)
+    )
 
   res.json({ Points: pointsInViewport })
 }

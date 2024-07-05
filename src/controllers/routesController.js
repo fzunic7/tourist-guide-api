@@ -21,16 +21,16 @@ const findNearestRoutes = async(req, res) => {
 
   const routes = await fetchRoutesData()
 
-  const routesWithDistance = routes.map(route => {
+  const routesWithDistance = routes.flatMap(route => {
     const distances = route.pointsOnRoutes.map(pointOnRoute => {
       const region = pointOnRoute.point.region
       const center = turf.center(region.geometry)
       const distance = turf.distance(center.geometry.coordinates, coordinates)
-      return distance
+      return { ...pointOnRoute, distance }
     })
 
-    const minDistance = Math.min(...distances)
-    return { ...route, distance: minDistance }
+    const minDistance = Math.min(...distances.map(d => d.distance))
+    return distances.map(point => ({ ...route, ...point, distance: minDistance }))
   })
 
   routesWithDistance.sort((a, b) => a.distance - b.distance)
