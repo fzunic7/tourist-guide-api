@@ -19,7 +19,7 @@ To install and run the Tourist Guide API locally, follow these steps:
 1. **Clone the repository:**
 
   ```bash
-   git clone <repository_url>
+   git clone https://github.com/fzunic7/tourist-guide-api
    cd tourist-guide-api
   ```
 
