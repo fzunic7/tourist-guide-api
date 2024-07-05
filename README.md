@@ -83,5 +83,6 @@ This command will execute the test cases defined in the **test** directory and p
 The Tourist Guide API uses the following main dependencies:
 
 - Express: Fast, unopinionated, minimalist web framework for Node.js.
+- @turf/turf: Advanced geospatial analysis for browsers and Node.js.
 - Jest: JavaScript testing framework.
 - supertest: HTTP assertion library, used for testing HTTP requests.
