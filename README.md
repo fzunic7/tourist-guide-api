@@ -59,6 +59,7 @@ This command will execute the test cases defined in the **test** directory and p
 - **Query Parameters:**
   - `lng`: Longitude coordinate.
   - `lat`: Latitude coordinate.
+  - `count`: Number of routes to return
 - **Responses:**
   - `200 OK`: Returns an array of nearest routes.
   - `400 Bad Request`: Indicates that `lng` or `lat` query parameters are missing.
@@ -68,8 +69,10 @@ This command will execute the test cases defined in the **test** directory and p
 
 - **Description:** Retrieves the nearest points of interest based on given coordinates.
 - **Query Parameters:**
-  - `lng`: Longitude coordinate.
-  - `lat`: Latitude coordinate.
+  - `lng1`: Longitude of the first corner.
+  - `lat1`: Latitude of the first corner
+  - `lng2`: Longitude of the opposite corner
+  - `lat2`: Latitude of the opposite corner
 - **Responses:**
   - `200 OK`: Returns an array of nearest points.
   - `400 Bad Request`: Indicates that `lng` or `lat` query parameters are missing.
